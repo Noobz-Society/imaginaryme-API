@@ -1,0 +1,18 @@
+### Test auth with JWT
+GET localhost:3000/auth/test-auth
+Authorization: Bearer {{jwt}}
+
+### Test auth with no JWT
+GET localhost:3000/auth/test-auth
+
+
+### Test auth Admin with JWT
+GET localhost:3000/auth/test-admin
+Authorization: Bearer {{jwt}}
+
+### Test auth Admin with no JWT
+GET localhost:3000/auth/test-admin
+
+### Test auth Admin with JWT but admin
+GET localhost:3000/auth/test-admin
+Authorization: Bearer {{admin-jwt}}

@@ -1,0 +1,34 @@
+POST localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@gmail.com",
+    "password": "admin"
+}
+
+###
+POST localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "boloss@gmail.com",
+  "password": "B0lo$$m@n"
+}
+
+
+### Fail: wrong password
+POST localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "admi@gmail.com",
+  "password": "B0lo$$m@n42"
+}
+
+### Fail: missing fields
+POST localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": ""
+}
