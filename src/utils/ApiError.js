@@ -72,8 +72,8 @@ class ApiError extends Error {
      * @returns {ApiError}
      */
     static InvalidCredentials() {
-        const message = `invalid credentials`;
-        return new ApiError(401, null, message, "INVALID_CREDENTIALS");
+        const message = `Your email or password is incorrect`;
+        return new ApiError(401, "password", message, "INVALID_CREDENTIALS");
     }
 
     /**

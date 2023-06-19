@@ -32,3 +32,12 @@ Content-Type: application/json
 {
   "email": ""
 }
+
+### Fail: wrong email format
+POST localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin",
+  "password": "admin"
+}

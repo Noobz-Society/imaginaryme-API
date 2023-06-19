@@ -6,3 +6,32 @@ Content-Type: application/json
     "name": "admin",
     "password": "admin"
 }
+
+### Missing fields
+POST localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "",
+  "name": "          "
+}
+
+### Invalid email
+POST localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin",
+  "name": "admin",
+  "password": "admin"
+}
+
+### Invalid password
+POST localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "truc@gmail.com",
+  "name": "truc",
+  "password": "truc"
+}

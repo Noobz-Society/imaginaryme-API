@@ -2,8 +2,8 @@
 const express = require("express");
 const authService = require("../services/auth");
 
-const validator = require("validator");
 const crypto = require("crypto-js");
+const validator = require("validator");
 const ApiError = require("../utils/ApiError");
 
 /**
@@ -46,8 +46,6 @@ async function register(req, res) {
     // password: required, string (ascii), 8-50 chars, ?-1 uppercase, ?-1 lowercase, ?-1 number, ?-1 special char
     if (!req.body.password) {
         errors.push(ApiError.MissingField("password"));
-    } else if (req.body.password.length < 8 || req.body.password.length > 50) {
-        errors.push(ApiError.InvalidLength("password", 8, 50));
     } else if (!validator.isAscii(req.body.password)) {
         errors.push(ApiError.InvalidField("password"));
     } else if (!validator.isStrongPassword(req.body.password)) {
@@ -63,9 +61,8 @@ async function register(req, res) {
     // If there are no errors, create the user
     const hashedPassword = crypto.SHA256(req.body.password).toString();
     const user = await authService.createUser(req.body.email, req.body.name, hashedPassword);
-    user.save().then((result) => {
-        // TODO ne pas renvoyer le user entier (avec le mot de passe)
-        res.status(201).json(result);
+    user.save().then(() => {
+        res.status(201).send();
     }).catch((err) => {
         res.status(500).json(err);
     });

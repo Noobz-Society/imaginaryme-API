@@ -2,6 +2,7 @@
 const express = require("express");
 
 /**
+ * Trims all string values in the body of a POST request
  * @param req {express.Request}
  * @param res {express.Response}
  * @param next {express.NextFunction}
