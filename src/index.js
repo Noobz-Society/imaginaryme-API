@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const postTrimer = require("./middlewares/postTrimer");
 const responseTransformer = require("./middlewares/responseTransformer");
 
@@ -11,6 +12,7 @@ const port = process.env.PORT || 3000;
  */
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use(postTrimer);
 app.use(responseTransformer);
 
