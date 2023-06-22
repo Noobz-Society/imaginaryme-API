@@ -1,11 +1,12 @@
-// noinspection JSUnusedLocalSymbols
-const express = require("express");
+import express from "express";
+
+const {Request, Response, NextFunction} = express;
 
 /**
  * Trims all string values in the body of a POST request
- * @param req {express.Request}
- * @param res {express.Response}
- * @param next {express.NextFunction}
+ * @param req {Request}
+ * @param res {Response}
+ * @param next {NextFunction}
  * @returns {Promise<void>}
  */
 function postTrimmer(req, res, next) {
@@ -18,4 +19,4 @@ function postTrimmer(req, res, next) {
     next();
 }
 
-module.exports = postTrimmer;
+export default postTrimmer;

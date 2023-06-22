@@ -1,19 +1,18 @@
-// Initialise les variables d'environnement
-require("dotenv").config();
+import connectToDatabase from "./src/database.js";
+import main from "./src/index.js";
 
+// Vérifie que les variables d'environnement nécessaires sont bien définies
 if (!process.env.JWT_SECRET_TOKEN) {
     console.error("JWT_SECRET_TOKEN not set.");
     process.exit(1);
 }
 
-// Initialise la base de données
-const connectToDatabase = require("./src/database");
-
+// const connectToDatabase = require("./src/database");
 connectToDatabase().then(() => {
     console.log("Connexion à la base de données réussie.");
 
     // Initialise le serveur
-    require("./src/index");
+    main();
 }).catch((err) => {
     console.error(err);
 });
