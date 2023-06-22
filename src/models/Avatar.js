@@ -31,25 +31,16 @@ const AvatarSchema = new mongoose.Schema({
                     type: Number,
                     required: true,
                     enum: [-1, 1]
-                },
+                }
             }],
             default: []
         },
 
         attributes: {
             type: [{
-                key: {
-                    type: String,
-                    required: true
-                },
-                variationName: {
-                    type: String,
-                    required: true
-                },
-                color: {
-                    type: String,
-                    required: true
-                }
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "attributes.variations",
+                required: true
             }],
             default: []
         },
