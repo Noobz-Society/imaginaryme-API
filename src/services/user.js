@@ -21,8 +21,6 @@ async function getAvatars(id) {
     }
     ]))[0];
 
-    console.log(user);
-
     return user.avatars;
 }
 
