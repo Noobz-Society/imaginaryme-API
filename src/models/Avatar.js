@@ -38,9 +38,15 @@ const AvatarSchema = new mongoose.Schema({
 
         attributes: {
             type: [{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "attributes.variations",
-                required: true
+                variation: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "attributes.variations",
+                    required: true
+                },
+                color: {
+                    type: String,
+                    required: false
+                }
             }],
             default: []
         },

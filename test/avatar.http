@@ -43,3 +43,4 @@ GET http://localhost:3000/avatar/create
 
 ###
 GET http://localhost:3000/avatar/all
+Authorization: Bearer {{admin-jwt}}

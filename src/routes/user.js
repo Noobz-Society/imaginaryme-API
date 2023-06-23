@@ -4,6 +4,7 @@ import {requireAuth} from "../middlewares/assertAuth.js";
 
 const router = express.Router();
 
-router.get("/:userId/avatars", requireAuth, userController.getAvatars)
+router.get("/:userId/avatars", requireAuth, userController.getAvatars);
+router.post("/save-avatar", requireAuth, userController.saveAvatar);
 
 export default router;
