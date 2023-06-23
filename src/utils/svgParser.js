@@ -1,4 +1,5 @@
 import {parseSync, stringify} from "svgson";
+import * as svgo from "svgo";
 
 /**
  * Converts an SVG string to a HAST tree
@@ -29,7 +30,7 @@ function concatenateHastsToSvg(hasts, colors) {
     const hast = {...hasts[0]};
     delete hast.attributes.stroke;
     delete hast.attributes.fill;
-    hast.attributes.viewBox = `0 0 ${hast.attributes.width} ${hast.attributes.height}`
+    hast.attributes.viewBox = `0 0 ${hast.attributes.width} ${hast.attributes.height}`;
     delete hast.attributes.width;
     delete hast.attributes.height;
     hast.children = [];
@@ -49,7 +50,7 @@ function concatenateHastsToSvg(hasts, colors) {
             name: "g",
             type: "element",
             attributes: {
-                stroke: hasts[i].attributes.stroke === "none" ? "none" : colors[i],
+                // stroke: hasts[i].attributes.stroke === "none" ? "none" : colors[i],
                 fill: hasts[i].attributes.fill === "none" ? "none" : colors[i]
             },
             children: children,
@@ -59,7 +60,7 @@ function concatenateHastsToSvg(hasts, colors) {
         hast.children.push(group);
     }
     const svg = hastToSvg(hast);
-    return svg;
+    return svgo.optimize(svg).data;
 }
 
 const svgParser = {

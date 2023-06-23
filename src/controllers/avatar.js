@@ -44,7 +44,7 @@ export async function getSpecific(req, res) {
     let ids;
 
     if (!Array.isArray(req.body)) {
-        errors.push(ApiError.InvalidType("body", "{variation: string, color: string}[]"));
+        errors.push(ApiError.InvalidType("body", "{variation: string, colorless?: boolean, color?: string}[]"));
     } else if (req.body.length === 0) {
         errors.push(ApiError.InvalidLengthArray("body", 1, -1, "If you don't want to specify any variations, use the GET method instead"));
     }
@@ -65,8 +65,8 @@ export async function getSpecific(req, res) {
             errors.push(ApiError.NotFound(`body[${i}].variation`));
         }
         // color: string (hex color)
-        if (typeof color !== "string" || !validator.isHexColor(color)) {
-            errors.push(ApiError.InvalidType(`body[${i}].color`, "hex color"));
+        if (typeof color !== "string" && color !== null || typeof color === "string" && !validator.isHexColor(color)) {
+            errors.push(ApiError.InvalidType(`body[${i}].color`, "hex color or null"));
         }
     }
 
