@@ -1,6 +1,7 @@
 import Attribute from "../models/Attribute.js";
 import mongoose from "mongoose";
 import Avatar from "../models/Avatar.js";
+import svgParser from "../utils/svgParser.js";
 
 /**
  * Get variations by their ids
@@ -76,13 +77,29 @@ async function variationExistsById(variationId) {
  * @returns {Promise<Avatar[]>}
  */
 async function getAll(canSeePrivate) {
+    /**
+     * @type {Avatar[]}
+     */
+    let avatars;
     if (canSeePrivate) {
-        return Avatar.find();
+        avatars = await Avatar.find();
     } else {
-        return Avatar.find({
+        avatars = await Avatar.find({
             private: false
         });
     }
+
+    avatars = await Promise.all(avatars.map(async avatar => {
+        const newAvatar = avatar.toObject();
+        const variations = await getVariationsByIds(newAvatar.attributes.map(({variation}) => variation));
+        const colors = newAvatar.attributes.map(({color}) => color);
+
+        newAvatar.svg = svgParser.concatenateHastsToSvg(variations, colors);
+        console.log(newAvatar);
+        return newAvatar;
+    }));
+
+    return avatars;
 }
 
 const avatarService = {

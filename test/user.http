@@ -1,2 +1,29 @@
 GET http://localhost:3000/user/648cd83d4d3676037ecf92c9/avatars
 Authorization: Bearer {{jwt}}
+
+### Save avatar
+POST http://localhost:3000/user/save-avatar
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+    "name": "wololooooo",
+    "attributes": [
+        {
+            "variation": "64943f502d9bc32598a3706b",
+            "color": "#f99664"
+        },
+        {
+            "variation": "64944b9edea8c6aa848b713b",
+            "color": "#f0f"
+        },
+        {
+            "variation": "64954795be98c615c564d433",
+            "color": null
+        },
+        {
+            "variation": "64954da228eb0d9386e7507b",
+            "color": null
+        }
+    ]
+}

@@ -92,12 +92,8 @@ export async function getSpecific(req, res) {
 async function getAll(req, res) {
     const canSeePrivate = req.user?.role === "admin";
 
-    try {
-        const variations = await avatarService.getAll(canSeePrivate);
-        res.json(variations);
-    } catch (e) {
-        res.status(500).json(e);
-    }
+    const avatars = await avatarService.getAll(canSeePrivate);
+    res.json(avatars);
 }
 
 
