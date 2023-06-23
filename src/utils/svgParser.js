@@ -1,4 +1,3 @@
-import * as svgo from "svgo";
 import {parseSync, stringify} from "svgson";
 
 /**
@@ -6,7 +5,6 @@ import {parseSync, stringify} from "svgson";
  * @param svg {string}
  */
 function svgToHast(svg) {
-    svg = svgo.optimize(svg).data;
     return parseSync(svg);
 }
 
@@ -31,6 +29,9 @@ function concatenateHastsToSvg(hasts, colors) {
     const hast = {...hasts[0]};
     delete hast.attributes.stroke;
     delete hast.attributes.fill;
+    hast.attributes.viewBox = `0 0 ${hast.attributes.width} ${hast.attributes.height}`
+    delete hast.attributes.width;
+    delete hast.attributes.height;
     hast.children = [];
 
     // Retrieve the children of each HAST tree and surround them with a group
@@ -58,7 +59,7 @@ function concatenateHastsToSvg(hasts, colors) {
         hast.children.push(group);
     }
     const svg = hastToSvg(hast);
-    return svgo.optimize(svg).data;
+    return svg;
 }
 
 const svgParser = {

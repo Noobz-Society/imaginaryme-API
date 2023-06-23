@@ -9,7 +9,7 @@ import attributeRouter from './routes/attribute.js';
 import userRouter from './routes/user.js';
 
 function main() {
-    const port = process.env.PORT || 3000;
+    const port = process.env.PORT || 4000;
 
     const app = express();
     app.use(express.json());
