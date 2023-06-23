@@ -18,7 +18,12 @@ const AttributeSchema = new mongoose.Schema({
                     required: true
                 }
             }],
-            default: [],
+            default: []
+        },
+
+        colorless: {
+            type: Boolean,
+            default: false
         },
 
         colors: {

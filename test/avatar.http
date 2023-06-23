@@ -31,4 +31,4 @@ Content-Type: application/json
 []
 
 ###
-GET http://localhost:3000/avatar/
+GET http://localhost:3000/avatar/all

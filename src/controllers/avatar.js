@@ -84,8 +84,25 @@ export async function getSpecific(req, res) {
     res.send(svg);
 }
 
+/**
+ * @param req {Request}
+ * @param res {Response}
+ * @returns {Promise<void>}
+ */
+async function getAll(req, res) {
+    const canSeePrivate = req.user?.role === "admin";
+
+    try {
+        const variations = await avatarService.getAll(canSeePrivate);
+        res.json(variations);
+    } catch (e) {
+        res.status(500).json(e);
+    }
+}
+
 
 const avatarController = {
+    getAll,
     getRandom,
     getSpecific
 };

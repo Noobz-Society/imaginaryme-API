@@ -1,5 +1,6 @@
 import Attribute from "../models/Attribute.js";
 import mongoose from "mongoose";
+import Avatar from "../models/Avatar.js";
 
 /**
  * Get variations by their ids
@@ -69,7 +70,23 @@ async function variationExistsById(variationId) {
     });
 }
 
+/**
+ * Get all avatars
+ * @param canSeePrivate {boolean}
+ * @returns {Promise<Avatar[]>}
+ */
+async function getAll(canSeePrivate) {
+    if (canSeePrivate) {
+        return Avatar.find();
+    } else {
+        return Avatar.find({
+            private: false
+        });
+    }
+}
+
 const avatarService = {
+    getAll,
     getVariationsByIds,
     getRandomVariationIdsAndColors,
     variationExistsById

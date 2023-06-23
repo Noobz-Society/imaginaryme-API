@@ -3,7 +3,7 @@ import authService from "../services/auth.js";
 import ApiError from "../utils/ApiError.js";
 import validator from "validator";
 
-import * as crypto from "crypto";
+import sha256 from "crypto-js/sha256.js";
 
 const {Request, Response} = express;
 
@@ -67,7 +67,7 @@ async function register(req, res) {
     }
 
     // If there are no errors, create the user
-    const hashedPassword = crypto.SHA256(req.body.password).toString();
+    const hashedPassword = sha256(req.body.password).toString();
     const user = await authService.createUser(req.body.email, req.body.name, hashedPassword);
     user.save().then(() => {
         res.status(201).send();
@@ -116,7 +116,7 @@ async function login(req, res) {
     }
 
     // If there are no errors, login the user
-    const hashedPassword = crypto.SHA256(req.body.password).toString();
+    const hashedPassword = sha256(req.body.password).toString();
     const jwt = await authService.login(req.body.email, hashedPassword);
 
     if (jwt) {

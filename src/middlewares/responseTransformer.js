@@ -22,7 +22,7 @@ function responseTransformer(req, res, next) {
             data = [data];
         }
 
-        if (Array.isArray(data) && data.every((item) => item instanceof ApiError)) {
+        if (Array.isArray(data) && data.length > 0 && data.every((item) => item instanceof ApiError)) {
             this.statusCode = chooseBestStatusCode(data.map(e => e.statusCode));
 
             const result = [];

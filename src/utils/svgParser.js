@@ -48,8 +48,8 @@ function concatenateHastsToSvg(hasts, colors) {
             name: "g",
             type: "element",
             attributes: {
-                stroke: colors[i],
-                fill: colors[i]
+                stroke: hasts[i].attributes.stroke === "none" ? "none" : colors[i],
+                fill: hasts[i].attributes.fill === "none" ? "none" : colors[i]
             },
             children: children,
             value: null

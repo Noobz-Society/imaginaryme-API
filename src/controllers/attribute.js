@@ -8,7 +8,7 @@ const {Request, Response} = express;
 
 /**
  * @param req {Request}
- * @param req.body {{key: string, variations: {name: string, svg: string}[]}}
+ * @param req.body {{key: string, variations: {name: string, svg: string}[], colorless?: boolean, colors: string[]}}
  * @param res {Response}
  * @returns {Promise<void>}
  */
@@ -42,13 +42,23 @@ async function create(req, res) {
         errors.push(ApiError.InvalidLengthArray("variations", 1, -1));
     }
 
-    // colors: required, array<string (hex)>, min 1
-    if (!req.body.colors) {
-        errors.push(ApiError.MissingField("colors"));
-    } else if (!Array.isArray(req.body.colors) || !req.body.colors.every(c => typeof c === "string" && validator.isHexColor(c))) {
-        errors.push(ApiError.InvalidType("colors", "hex color[]"));
-    } else if (req.body.colors.length < 1) {
-        errors.push(ApiError.InvalidLengthArray("colors", 1, -1));
+    req.body.colorless ||= false;
+    if (typeof req.body.colorless !== "boolean") {
+        errors.push(ApiError.InvalidType("colorless", "boolean", "you can omit this field if you want to use colors"));
+    } else if (req.body.colorless === false) {
+        if (!req.body.colors) {
+            errors.push(ApiError.MissingField("colors", "if you don't want any color, set colorless to true"));
+        } else if (!Array.isArray(req.body.colors) || !req.body.colors.every(c => typeof c === "string" && validator.isHexColor(c))) {
+            errors.push(ApiError.InvalidType("colors", "string[]", "colors must be an array of hex colors"));
+        } else if (req.body.colors.length < 1) {
+            errors.push(ApiError.InvalidLengthArray("colors", 1, -1, "if you don't want any color, set colorless to true"));
+        }
+    } else /*if (req.body.colorless === true) */{
+        if (req.body.colors) {
+            errors.push(ApiError.InvalidField("colorless", "you can't set colorless to true and also provide colors at the same time"));
+        } else {
+            req.body.colors = [];
+        }
     }
 
     // If there are any errors, return them
@@ -58,7 +68,7 @@ async function create(req, res) {
     }
 
     // Create the attribute
-    const attribute = await attributeService.create(req.body.key, req.body.variations, req.body.colors);
+    const attribute = await attributeService.create(req.body);
     attribute.save().then(() => {
         res.status(201).json(attribute);
     }).catch((err) => {

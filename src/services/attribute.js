@@ -6,22 +6,16 @@ async function keyExists(key) {
 }
 
 /**
- *
- * @param key {string} Unique key of the attribute
- * @param variations {{name: string, svg: string|Object}[]}} Array of variations
- * @param colors {string[]} Array of hex colors
+ * Create an attribute
+ * @param body {object} Attribute data
  */
-async function create(key, variations, colors) {
-    variations = variations.map(v => ({
-        name: v.name,
-        svg: svgParser.svgToHast(v.svg)
-    }));
-
-    return Attribute.create({
-        key,
-        variations,
-        colors
+async function create(body) {
+    body.variations = body.variations.map(v => {
+        v.svg = svgParser.hastToSvg(v.svg);
+        return v;
     });
+
+    return Attribute.create(body);
 }
 
 /**
@@ -29,16 +23,13 @@ async function create(key, variations, colors) {
  */
 async function getAll() {
     const attributes = await Attribute.find();
-    return attributes.map(a => ({
-        _id: a._id,
-        key: a.key,
-        variations: a.variations.map(v => ({
-            _id: v._id,
-            name: v.name,
-            svg: svgParser.hastToSvg(v.svg)
-        })),
-        colors: a.colors
-    }));
+    return attributes.map(a => {
+        a.variations = a.variations.map(v => {
+            v.svg = svgParser.hastToSvg(v.svg);
+            return v;
+        });
+        return a;
+    });
 }
 
 /**

@@ -1,0 +1,2 @@
+GET http://localhost:3000/user/648cd83d4d3676037ecf92c9/avatars
+Authorization: Bearer {{jwt}}
