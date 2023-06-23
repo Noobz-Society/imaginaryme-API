@@ -1,12 +1,6 @@
-/**
- *
- * @type {Mongoose}
- */
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-/**
- * @type {Schema}
- */
+
 const AvatarSchema = new mongoose.Schema({
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -32,6 +26,11 @@ const AvatarSchema = new mongoose.Schema({
                     type: mongoose.Schema.Types.ObjectId,
                     ref: "users",
                     required: true
+                },
+                value: {
+                    type: Number,
+                    required: true,
+                    enum: [-1, 1]
                 }
             }],
             default: []
@@ -39,14 +38,9 @@ const AvatarSchema = new mongoose.Schema({
 
         attributes: {
             type: [{
-                key: {
-                    type: String,
-                    required: true
-                },
-                variationName: {
-                    type: String,
-                    required: true
-                }
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "attributes.variations",
+                required: true
             }],
             default: []
         },
@@ -58,4 +52,4 @@ const AvatarSchema = new mongoose.Schema({
     }, {versionKey: false} // Disable the version key
 );
 
-module.exports = mongoose.model("avatars", AvatarSchema);
+export default mongoose.models["avatars"] || mongoose.model("avatars", AvatarSchema);

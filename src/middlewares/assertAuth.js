@@ -1,5 +1,5 @@
-const jwtManager = require("../utils/jwtManager");
-const ApiError = require("../utils/ApiError");
+import jwtManager from "../utils/jwtManager.js";
+import ApiError from "../utils/ApiError.js";
 
 function requireAuth(req, res, next) {
     try {
@@ -15,7 +15,6 @@ function requireAuth(req, res, next) {
 
 function requireAdmin(req, res, next) {
     requireAuth(req, res, () => {
-        console.log(req.user)
         if (req.user.role !== "admin") {
             res.json(ApiError.NotAuthorized());
             return;
@@ -25,7 +24,5 @@ function requireAdmin(req, res, next) {
     })
 }
 
-module.exports = {
-    requireAuth,
-    requireAdmin
-}
+export {requireAuth, requireAdmin}
+

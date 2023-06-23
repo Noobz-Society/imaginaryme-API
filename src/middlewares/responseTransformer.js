@@ -1,11 +1,13 @@
-// noinspection JSUnusedLocalSymbols
-const express = require("express");
-const ApiError = require("../utils/ApiError");
+import express from "express";
+import ApiError from "../utils/ApiError.js";
+
+const {Request, Response, NextFunction} = express;
+
 
 /**
- * @param req {express.Request}
- * @param res {express.Response}
- * @param next {express.NextFunction}
+ * @param req {Request}
+ * @param res {Response}
+ * @param next {NextFunction}
  * @returns {Promise<void>}
  */
 function responseTransformer(req, res, next) {
@@ -20,7 +22,7 @@ function responseTransformer(req, res, next) {
             data = [data];
         }
 
-        if (Array.isArray(data) && data.every((item) => item instanceof ApiError)) {
+        if (Array.isArray(data) && data.length > 0 && data.every((item) => item instanceof ApiError)) {
             this.statusCode = chooseBestStatusCode(data.map(e => e.statusCode));
 
             const result = [];
@@ -54,4 +56,4 @@ function chooseBestStatusCode(errors) {
     return 418;
 }
 
-module.exports = responseTransformer;
+export default responseTransformer;

@@ -1,0 +1,34 @@
+POST http://localhost:3000/avatar
+Content-Type: application/json
+
+[
+  {
+    "variation": "6491fcd62c1a83f95d14e5ec"
+  },
+  {
+  }
+]
+
+###
+POST http://localhost:3000/avatar
+Content-Type: application/json
+
+[
+  {
+    "variation": "6491fcd62c1a83f95d14e5ec",
+    "color": "#f00"
+  },
+  {
+    "variation": "6491fcfb2c1a83f95d14e5f6",
+    "color": "#00f"
+  }
+]
+
+###
+POST http://localhost:3000/avatar
+Content-Type: application/json
+
+[]
+
+###
+GET http://localhost:3000/avatar/all

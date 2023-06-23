@@ -38,6 +38,6 @@ POST localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "admin",
+  "email": 42,
   "password": "admin"
 }

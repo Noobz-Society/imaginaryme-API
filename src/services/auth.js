@@ -1,5 +1,5 @@
-const User = require("../models/user");
-const jwtManager = require("../utils/jwtManager");
+import User from "../models/User.js";
+import jwtManager from "../utils/jwtManager.js";
 
 async function emailExists(email) {
     // case insensitive
@@ -30,9 +30,10 @@ async function login(email, password) {
     }
 }
 
-module.exports = {
+const authService = {
     emailExists,
     nameExists,
     createUser,
     login
-};
+}
+export default authService;

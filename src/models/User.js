@@ -1,12 +1,7 @@
-/**
- * @type {Mongoose}
- */
-const mongoose = require("mongoose");
-const {Schema} = mongoose;
+import mongoose from "mongoose";
+import validator from "validator";
 
-const validator = require("validator");
-
-const UserSchema = new Schema({
+const UserSchema = new mongoose.Schema({
         name: {
             type: String,
             required: [true, "Please provide a name!"],
@@ -34,8 +29,18 @@ const UserSchema = new Schema({
             enum: ["admin", "user"],
             default: "user",
             unique: false
+        },
+
+        blocked: {
+            type: Number,
+            default: 0
+        },
+
+        creationDate: {
+            type: Date,
+            default: Date.now
         }
     }, {versionKey: false} // Disable the version key
 );
 
-module.exports = mongoose.models["users"] || mongoose.model("users", UserSchema);
+export default (mongoose.models["users"] || mongoose.model("users", UserSchema));
