@@ -11,7 +11,7 @@ async function keyExists(key) {
  */
 async function create(body) {
     body.variations = body.variations.map(v => {
-        v.svg = svgParser.hastToSvg(v.svg);
+        v.svg = svgParser.svgToHast(v.svg);
         return v;
     });
 

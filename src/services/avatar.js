@@ -95,7 +95,6 @@ async function getAll(canSeePrivate) {
         const colors = newAvatar.attributes.map(({color}) => color);
 
         newAvatar.svg = svgParser.concatenateHastsToSvg(variations, colors);
-        console.log(newAvatar);
         return newAvatar;
     }));
 

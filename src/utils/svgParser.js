@@ -14,6 +14,9 @@ function svgToHast(svg) {
  * @param hast {INode}
  */
 function hastToSvg(hast) {
+    hast.attributes.viewBox = `0 0 ${hast.attributes.width} ${hast.attributes.height}`;
+    delete hast.attributes.width;
+    delete hast.attributes.height;
     return stringify(hast);
 }
 
@@ -30,9 +33,6 @@ function concatenateHastsToSvg(hasts, colors) {
     const hast = {...hasts[0]};
     delete hast.attributes.stroke;
     delete hast.attributes.fill;
-    hast.attributes.viewBox = `0 0 ${hast.attributes.width} ${hast.attributes.height}`;
-    delete hast.attributes.width;
-    delete hast.attributes.height;
     hast.children = [];
 
     // Retrieve the children of each HAST tree and surround them with a group
