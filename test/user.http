@@ -2,7 +2,7 @@ GET http://localhost:3000/user/648cd83d4d3676037ecf92c9/avatars
 Authorization: Bearer {{jwt}}
 
 ### Save avatar
-POST http://localhost:3000/user/save-avatar
+POST http://localhost:4000/user/save-avatar
 Authorization: Bearer {{jwt}}
 Content-Type: application/json
 
