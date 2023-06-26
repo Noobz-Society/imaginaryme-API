@@ -5,9 +5,11 @@ if (!process.env.DATABASE_URI) {
     process.exit(1);
 }
 
-function connectToDatabase() {
+/**
+ * Connects to the database and returns the connection
+ * @returns {Promise<mongoose.Connection>}
+ */
+export async function connectToDatabase() {
     console.log(`Connexion à la base de données en cours...`);
-    return mongoose.connect(process.env.DATABASE_URI);
+    return (await mongoose.connect(process.env.DATABASE_URI)).connection;
 }
-
-export default connectToDatabase;
