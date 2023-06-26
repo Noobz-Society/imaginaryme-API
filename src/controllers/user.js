@@ -65,6 +65,13 @@ async function saveAvatar(req, res) {
         errors.push(ApiError.InvalidLength("name", 3, 25));
     }
 
+    //isPublic: boolean, default false
+    if (req.body.isPublic && typeof req.body.isPublic !== "boolean") {
+        errors.push(ApiError.InvalidType("isPublic", "boolean"));
+    } else {
+        req.body.isPublic = false;
+    }
+
     // attributes: required, {variation: string, color: string}[], min 1
     if (!req.body.attributes) {
         errors.push(ApiError.MissingField("attributes"));

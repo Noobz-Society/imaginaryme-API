@@ -27,11 +27,12 @@ async function getAvatars(id) {
 /**
  * Save an avatar to the database
  * @param userId
- * @param body {{name: string, attributes: {variation: string, color: string}[]}}
+ * @param body {{name: string, isPublic: boolean, attributes: {variation: string, color: string}[]}}
  */
 async function saveAvatar(userId, body) {
     return Avatar.create({
         name: body.name,
+        isPublic: body.isPublic,
         user: userId,
         attributes: body.attributes.map(v => ({
             variation: v.variation,
