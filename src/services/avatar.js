@@ -82,7 +82,7 @@ async function getAll(canSeePrivate) {
         avatars = await Avatar.find();
     } else {
         avatars = await Avatar.find({
-            isPublic: false
+            isPublic: true
         });
     }
 
