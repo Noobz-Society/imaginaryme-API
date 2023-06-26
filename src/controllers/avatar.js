@@ -18,7 +18,12 @@ export async function getRandom(req, res) {
 
     const svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), ids_and_colors.map(({color}) => color));
 
-    res.json({attributes: variations, svg});
+    res.json({
+        attributes: variations.map(v => {
+            v.color = ids_and_colors.find(({_id}) => _id.equals(v._id)).color;
+            return v;
+        }), svg
+    });
 }
 
 /**
