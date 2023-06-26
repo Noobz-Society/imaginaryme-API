@@ -6,12 +6,12 @@ import svgParser from "../utils/svgParser.js";
 /**
  * Get variations by their ids
  * @param ids {string[]} Array of ObjectId of the variations
- * @returns {Promise<INode[]>}
+ * @returns {Promise<{_id: string, name: string, svg: INode}[]>}
  */
 async function getVariationsByIds(ids) {
     const objectIds = ids.map(id => new mongoose.Types.ObjectId(id));
 
-    let variations = await Attribute.aggregate([{
+    return Attribute.aggregate([{
         $project: {
             variations: {
                 $filter: {
@@ -29,9 +29,6 @@ async function getVariationsByIds(ids) {
             newRoot: "$variations"
         }
     }]);
-
-    // noinspection JSUnresolvedReference
-    return variations.map(v => v.svg);
 }
 
 async function getRandomVariationIdsAndColors() {
@@ -94,7 +91,7 @@ async function getAll(canSeePrivate) {
         const variations = await getVariationsByIds(newAvatar.attributes.map(({variation}) => variation));
         const colors = newAvatar.attributes.map(({color}) => color);
 
-        newAvatar.svg = svgParser.concatenateHastsToSvg(variations, colors);
+        newAvatar.svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), colors);
         return newAvatar;
     }));
 

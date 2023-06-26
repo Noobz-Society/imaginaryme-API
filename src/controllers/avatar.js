@@ -16,9 +16,9 @@ export async function getRandom(req, res) {
 
     const variations = await avatarService.getVariationsByIds(ids_and_colors.map(({_id}) => _id));
 
-    const svg = svgParser.concatenateHastsToSvg(variations, ids_and_colors.map(({color}) => color));
+    const svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), ids_and_colors.map(({color}) => color));
 
-    res.send(svg);
+    res.json({attributes: variations, svg});
 }
 
 /**
@@ -79,7 +79,7 @@ export async function getSpecific(req, res) {
     ids = req.body.map(({variation}) => variation);
 
     const variations = await avatarService.getVariationsByIds(ids);
-    const svg = svgParser.concatenateHastsToSvg(variations, req.body.map(({color}) => color));
+    const svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), req.body.map(({color}) => color));
 
     res.send(svg);
 }
