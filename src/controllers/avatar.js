@@ -21,6 +21,7 @@ export async function getRandom(req, res) {
     res.json({
         attributes: variations.map(v => {
             v.color = ids_and_colors.find(({_id}) => _id.equals(v._id)).color;
+            delete v.svg;
             return v;
         }), svg
     });
