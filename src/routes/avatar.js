@@ -9,6 +9,7 @@ router.get("/create", avatarController.getRandom);
 
 router.get("/all", requireAuth, avatarController.getAll);
 
-// router.post("/", requireAuth ,avatarController.save);
+router.post("/:id/like", requireAuth, avatarController.like);
+router.post("/:id/visibility", requireAuth, avatarController.changeVisibility);
 
 export default router;

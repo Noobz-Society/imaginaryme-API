@@ -98,8 +98,27 @@ async function getAll(canSeePrivate) {
     return avatars;
 }
 
+async function exists(id) {
+    return Avatar.exists({
+        _id: id
+    });
+}
+
+/**
+ * Find one avatar by its id
+ * @param id {string}
+ * @returns {Promise<Avatar>}
+ */
+async function findOne(id) {
+    return Avatar.findOne({
+        _id: id
+    });
+}
+
 const avatarService = {
     getAll,
+    findOne,
+    exists,
     getVariationsByIds,
     getRandomVariationIdsAndColors,
     variationExistsById

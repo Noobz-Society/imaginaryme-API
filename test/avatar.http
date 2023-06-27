@@ -28,7 +28,6 @@ Content-Type: application/json
      "color": null,
      "colorless": true
   }
-  
 ]
 
 ###
@@ -42,3 +41,22 @@ GET http://localhost:3000/avatar/create
 
 ###
 GET http://localhost:3000/avatar/all
+Authorization: Bearer {{admin-jwt}}
+
+###
+POST http://localhost:3000/avatar/649ab13c70541ff44bd7ea90/visibility
+Authorization: Bearer {{admin-jwt}}
+Content-Type: application/json
+
+{
+  "isPublic": false
+}
+
+###
+POST http://localhost:3000/avatar/649ab13c70541ff44bd7ea90/like
+Authorization: Bearer {{admin-jwt}}
+Content-Type: application/json
+
+{
+  "value": 0
+}

@@ -29,6 +29,17 @@ class ApiError extends Error {
     }
 
     /**
+     * Use when a field's value is invalid
+     * @param field {string}
+     * @param message {string|null}
+     * @returns {ApiError}
+     */
+    static InvalidValue(field, message = null) {
+        message ||= `Invalid value for field: ${field}`;
+        return new ApiError(400, field, message, "INVALID_VALUE");
+    }
+
+    /**
      * Use when a field that should be unique is already used
      * @param field {string}
      * @param message {string|null}

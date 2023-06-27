@@ -22,7 +22,7 @@ const AvatarSchema = new mongoose.Schema({
 
         review: {
             type: [{
-                id: {
+                user: {
                     type: mongoose.Schema.Types.ObjectId,
                     ref: "users",
                     required: true

@@ -102,11 +102,132 @@ async function getAll(req, res) {
     res.json(avatars);
 }
 
+async function changeVisibility(req, res) {
+    // Initialize body if it doesn't exist, so we can check for fields, even if they are empty
+    req.body ||= {};
+
+    /**
+     * The errors that will be returned to the client
+     * @type {ApiError[]}
+     */
+    const errors = [];
+
+    const {id} = req.params;
+    const {isPublic} = req.body;
+
+    let avatar;
+    if (!validator.isMongoId(id)) {
+        errors.push(ApiError.InvalidType("id", "ObjectId"));
+    }  else {
+        avatar = await avatarService.findOne(id);
+        if (!avatar) {
+            errors.push(ApiError.NotFound("id"));
+        } else if (req.user.role !== "admin" && !avatar.user.equals(req.user._id)) {
+            errors.push(ApiError.NotAuthorized());
+        }
+    }
+
+    if (errors.length > 0) {
+        res.json(errors);
+        return;
+    }
+
+    if (isPublic === undefined) {
+        errors.push(ApiError.MissingField("isPublic"));
+    } else if (typeof isPublic !== "boolean") {
+        errors.push(ApiError.InvalidType("isPublic", "boolean"));
+    } else if (avatar.isPublic === isPublic) {
+        errors.push(ApiError.InvalidValue("isPublic", "is already set to the specified value"));
+    }
+
+    if (errors.length > 0) {
+        res.json(errors);
+        return;
+    }
+
+    avatar.isPublic = isPublic;
+    await avatar.save();
+
+    res.json(avatar)
+}
+
+async function like(req, res) {
+    // Initialize body if it doesn't exist, so we can check for fields, even if they are empty
+    req.body ||= {};
+
+    /**
+     * The errors that will be returned to the client
+     * @type {ApiError[]}
+     */
+    const errors = [];
+
+    const {id} = req.params;
+    const {value} = req.body;
+
+    let avatar;
+    if (!validator.isMongoId(id)) {
+        errors.push(ApiError.InvalidType("id", "ObjectId"));
+    } else {
+        avatar = await avatarService.findOne(id);
+        if (!avatar) {
+            errors.push(ApiError.NotFound("id"));
+        }
+    }
+
+    if (errors.length > 0) {
+        res.json(errors);
+        return;
+    }
+
+    // value: required, number, -1, 0 or 1
+    if (value === undefined) {
+        errors.push(ApiError.MissingField("value"));
+    } else if (typeof value !== "number") {
+        errors.push(ApiError.InvalidType("value", "number"));
+    } else if (![1, 0, -1].includes(value)) {
+        errors.push(ApiError.InvalidValue("value", "must be -1, 0 or 1"));
+    }
+
+    if (errors.length > 0) {
+        res.json(errors);
+        return;
+    }
+
+    // check if user has already liked or disliked this avatar
+    const reviewIndex = avatar.review.findIndex(({user}) => user.equals(req.user.id));
+    if (reviewIndex !== -1) {
+        if (avatar.review[reviewIndex].value === value) {
+            errors.push(ApiError.InvalidValue("like", "you have already liked or disliked this avatar"));
+        } else if (value === 0) {
+            avatar.review.splice(reviewIndex, 1);
+        } else {
+            avatar.review[reviewIndex].value = value;
+        }
+    } else {
+        if (value !== 0) {
+            avatar.review.push({
+                user: req.user.id,
+                value
+            });
+        }
+    }
+
+    if (errors.length > 0) {
+        res.json(errors);
+        return;
+    }
+
+    await avatar.save();
+    res.json(avatar);
+}
+
 
 const avatarController = {
     getAll,
     getRandom,
-    getSpecific
+    getSpecific,
+    changeVisibility,
+    like
 };
 
 export default avatarController;
