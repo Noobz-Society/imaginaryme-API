@@ -7,4 +7,6 @@ const router = express.Router();
 router.get("/:userId/avatars", requireAuth, userController.getAvatars);
 router.post("/save-avatar", requireAuth, userController.saveAvatar);
 
+router.delete("/:id", requireAuth, userController.deleteUser);
+
 export default router;

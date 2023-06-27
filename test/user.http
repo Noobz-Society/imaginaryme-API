@@ -27,3 +27,7 @@ Content-Type: application/json
         }
     ]
 }
+
+### Delete user
+DELETE http://localhost:3000/user/648d80e19a1f5743db611b4b
+Authorization: Bearer {{jwt}}

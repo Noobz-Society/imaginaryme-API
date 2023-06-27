@@ -41,10 +41,24 @@ async function saveAvatar(userId, body) {
     });
 }
 
+async function findOne(id) {
+    return User.findOne({
+        _id: id
+    });
+}
+
+async function deleteOne(id) {
+    return User.deleteOne({
+        _id: id
+    });
+}
+
 const userService = {
     exists,
+    findOne,
     getAvatars,
-    saveAvatar
+    saveAvatar,
+    deleteOne
 };
 
 export default userService;

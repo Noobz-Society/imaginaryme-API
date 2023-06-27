@@ -60,3 +60,7 @@ Content-Type: application/json
 {
   "value": 0
 }
+
+###
+DELETE http://localhost:3000/avatar/649ab13c70541ff44bd7ea90/
+Authorization: Bearer {{admin-jwt}}

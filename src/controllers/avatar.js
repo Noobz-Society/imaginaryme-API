@@ -118,7 +118,7 @@ async function changeVisibility(req, res) {
     let avatar;
     if (!validator.isMongoId(id)) {
         errors.push(ApiError.InvalidType("id", "ObjectId"));
-    }  else {
+    } else {
         avatar = await avatarService.findOne(id);
         if (!avatar) {
             errors.push(ApiError.NotFound("id"));
@@ -148,7 +148,7 @@ async function changeVisibility(req, res) {
     avatar.isPublic = isPublic;
     await avatar.save();
 
-    res.json(avatar)
+    res.json(avatar);
 }
 
 async function like(req, res) {
@@ -221,13 +221,39 @@ async function like(req, res) {
     res.json(avatar);
 }
 
+async function deleteAvatar(req, res) {
+    const {id} = req.params;
+
+    const errors = [];
+
+    if (!validator.isMongoId(id)) {
+        errors.push(ApiError.InvalidType("id", "ObjectId"));
+    } else {
+        const avatar = await avatarService.findOne(id);
+        if (!avatar) {
+            errors.push(ApiError.NotFound("id"));
+        } else if (req.user.role !== "admin" && !avatar.user.equals(req.user.id)) {
+            errors.push(ApiError.NotAuthorized());
+        }
+    }
+
+    if (errors.length > 0) {
+        res.json(errors);
+        return;
+    }
+
+    await avatarService.deleteOne(id);
+    res.status(204).send();
+}
+
 
 const avatarController = {
     getAll,
     getRandom,
     getSpecific,
     changeVisibility,
-    like
+    like,
+    deleteAvatar
 };
 
 export default avatarController;

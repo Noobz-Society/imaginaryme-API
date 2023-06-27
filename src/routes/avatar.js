@@ -11,5 +11,6 @@ router.get("/all", requireAuth, avatarController.getAll);
 
 router.post("/:id/like", requireAuth, avatarController.like);
 router.post("/:id/visibility", requireAuth, avatarController.changeVisibility);
+router.delete("/:id", requireAuth, avatarController.deleteAvatar);
 
 export default router;

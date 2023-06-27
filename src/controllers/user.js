@@ -114,9 +114,35 @@ async function saveAvatar(req, res) {
     }
 }
 
+async function deleteUser(req, res) {
+    const {id} = req.params;
+
+    const errors = [];
+
+    if (!validator.isMongoId(id)) {
+        errors.push(ApiError.InvalidType("id", "ObjectId"));
+    } else {
+        const user = await userService.findOne(id);
+        if (!user) {
+            errors.push(ApiError.NotFound("id"));
+        } else if (req.user.role !== "admin" && !id.equals(req.user.id)) {
+            errors.push(ApiError.NotAuthorized());
+        }
+    }
+
+    if (errors.length > 0) {
+        res.json(errors);
+        return;
+    }
+
+    await userService.deleteOne(id);
+    res.status(204).send();
+}
+
 const userController = {
     getAvatars,
-    saveAvatar
+    saveAvatar,
+    deleteUser
 };
 
 export default userController;

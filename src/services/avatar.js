@@ -115,13 +115,20 @@ async function findOne(id) {
     });
 }
 
+async function deleteOne(id) {
+    return Avatar.deleteOne({
+        _id: id
+    });
+}
+
 const avatarService = {
     getAll,
     findOne,
     exists,
     getVariationsByIds,
     getRandomVariationIdsAndColors,
-    variationExistsById
+    variationExistsById,
+    deleteOne
 };
 
 export default avatarService;
