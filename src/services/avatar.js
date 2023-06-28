@@ -13,20 +13,29 @@ async function getVariationsByIds(ids) {
 
     return Attribute.aggregate([{
         $project: {
-            variations: {
+            variation: {
                 $filter: {
                     input: "$variations",
                     cond: {
                         $in: ["$$this._id", objectIds]
                     }
                 }
-            }
+            },
+            "z-index": 1
         }
     }, {
-        $unwind: "$variations"
+        $unwind: "$variation"
+    }, {
+        $addFields: {
+            "variation.z-index": "$z-index"
+        }
     }, {
         $replaceRoot: {
-            newRoot: "$variations"
+            newRoot: "$variation"
+        }
+    }, {
+        $sort: {
+            "z-index": 1
         }
     }]);
 }
@@ -213,6 +222,10 @@ async function findOne(id) {
     return avatar;
 }
 
+async function get(id) {
+    return Avatar.findById(id);
+}
+
 async function deleteOne(id) {
     return Avatar.deleteOne({
         _id: id
@@ -221,6 +234,7 @@ async function deleteOne(id) {
 
 const avatarService = {
     getAll,
+    get,
     findOne,
     exists,
     getVariationsByIds,

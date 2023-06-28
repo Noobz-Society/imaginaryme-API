@@ -121,7 +121,7 @@ async function get(req, res) {
         res.json(ApiError.NotFound("id"));
         return;
     }
-    console.log(avatar.user._id, req.user.id);
+
     if (!avatar.isPublic && req.user?.role !== "admin" && avatar.user._id.toString() !== req.user.id) {
         res.json(ApiError.NotAuthorized());
         return;
@@ -147,10 +147,10 @@ async function changeVisibility(req, res) {
     if (!validator.isMongoId(id)) {
         errors.push(ApiError.InvalidType("id", "ObjectId"));
     } else {
-        avatar = await avatarService.findOne(id);
+        avatar = await avatarService.get(id);
         if (!avatar) {
             errors.push(ApiError.NotFound("id"));
-        } else if (req.user.role !== "admin" && avatar.user._id.toString() !== req.user.id) {
+        } else if (req.user.role !== "admin" && avatar.user.toString() !== req.user.id) {
             errors.push(ApiError.NotAuthorized());
         }
     }
@@ -196,7 +196,7 @@ async function like(req, res) {
     if (!validator.isMongoId(id)) {
         errors.push(ApiError.InvalidType("id", "ObjectId"));
     } else {
-        avatar = await avatarService.findOne(id);
+        avatar = await avatarService.get(id);
         if (!avatar) {
             errors.push(ApiError.NotFound("id"));
         }
