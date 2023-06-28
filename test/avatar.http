@@ -45,7 +45,7 @@ Authorization: Bearer {{jwt}}
 
 ###
 GET http://localhost:3000/avatar/649ab14170541ff44bd7eaa5
-Authorization: Bearer {{admin-jwt}}
+Authorization: Bearer {{temp-jwt}}
 
 ###
 POST http://localhost:3000/avatar/649ab13c70541ff44bd7ea90/visibility

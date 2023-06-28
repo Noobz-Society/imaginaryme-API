@@ -121,8 +121,8 @@ async function get(req, res) {
         res.json(ApiError.NotFound("id"));
         return;
     }
-
-    if (!avatar.isPublic && req.user?.role !== "admin" && !avatar.user.equals(req.user._id)) {
+    console.log(avatar.user._id, req.user.id);
+    if (!avatar.isPublic && req.user?.role !== "admin" && avatar.user._id.toString() !== req.user.id) {
         res.json(ApiError.NotAuthorized());
         return;
     }
@@ -150,7 +150,7 @@ async function changeVisibility(req, res) {
         avatar = await avatarService.findOne(id);
         if (!avatar) {
             errors.push(ApiError.NotFound("id"));
-        } else if (req.user.role !== "admin" && !avatar.user.equals(req.user._id)) {
+        } else if (req.user.role !== "admin" && avatar.user._id.toString() !== req.user.id) {
             errors.push(ApiError.NotAuthorized());
         }
     }
@@ -260,7 +260,7 @@ async function deleteAvatar(req, res) {
         const avatar = await avatarService.findOne(id);
         if (!avatar) {
             errors.push(ApiError.NotFound("id"));
-        } else if (req.user.role !== "admin" && !avatar.user.equals(req.user.id)) {
+        } else if (req.user.role !== "admin" && avatar.user._id.toString() !== req.user.id) {
             errors.push(ApiError.NotAuthorized());
         }
     }
