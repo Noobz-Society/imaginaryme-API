@@ -13,25 +13,24 @@ async function getVariationsByIds(ids) {
 
     return Attribute.aggregate([{
         $project: {
-            variation: {
+            variations: {
                 $filter: {
                     input: "$variations",
                     cond: {
                         $in: ["$$this._id", objectIds]
                     }
                 }
-            },
-            "z-index": 1
+            }
         }
     }, {
-        $unwind: "$variation"
+        $unwind: "$variations"
     }, {
         $addFields: {
             "variation.z-index": "$z-index"
         }
     }, {
         $replaceRoot: {
-            newRoot: "$variation"
+            newRoot: "$variations"
         }
     }]);
 }
@@ -138,10 +137,15 @@ async function getAll(canSeePrivate) {
         const colors = avatar.attributes.map(({color}) => color);
 
         avatar.svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), colors);
+        delete avatar.attributes;
         return avatar;
     }));
 
     return avatars;
+}
+
+async function get(id) {
+    return Avatar.findById(id);
 }
 
 async function exists(id) {
@@ -216,10 +220,6 @@ async function findOne(id) {
     avatar.svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), colors);
 
     return avatar;
-}
-
-async function get(id) {
-    return Avatar.findById(id);
 }
 
 async function deleteOne(id) {

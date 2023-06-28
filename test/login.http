@@ -15,15 +15,6 @@ Content-Type: application/json
   "password": "B0lo$$m@n"
 }
 
-###
-POST localhost:3000/auth/login
-Content-Type: application/json
-
-{
-  "email": "kurozawa@gmail.com",
-  "password": "Leviathanzer0*"
-}
-
 
 ### Fail: wrong password
 POST localhost:3000/auth/login

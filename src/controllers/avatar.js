@@ -265,7 +265,7 @@ async function deleteAvatar(req, res) {
         const avatar = await avatarService.findOne(id);
         if (!avatar) {
             errors.push(ApiError.NotFound("id"));
-        } else if (req.user.role !== "admin" && avatar.user._id.toString() !== req.user.id) {
+        } else if (req.user.role !== "admin" && !avatar.user.equals(req.user.id)) {
             errors.push(ApiError.NotAuthorized());
         }
     }

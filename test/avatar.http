@@ -40,12 +40,12 @@ Content-Type: application/json
 GET http://localhost:3000/avatar/create
 
 ###
-GET http://localhost:3000/avatar/all
-Authorization: Bearer {{jwt}}
+GET http://localhost:3000/avatar/649ab14170541ff44bd7eaa5
+Authorization: Bearer {{temp-jwt}}
 
 ###
 GET http://localhost:3000/avatar/649ab14170541ff44bd7eaa5
-Authorization: Bearer {{temp-jwt}}
+Authorization: Bearer {{admin-jwt}}
 
 ###
 POST http://localhost:3000/avatar/649ab14170541ff44bd7eaa5/visibility
@@ -62,7 +62,7 @@ Authorization: Bearer {{admin-jwt}}
 Content-Type: application/json
 
 {
-  "value": 1
+  "value": -1
 }
 
 ###
