@@ -26,6 +26,10 @@ async function getVariationsByIds(ids) {
     }, {
         $unwind: "$variation"
     }, {
+        $addFields: {
+            "variation.z-index": "$z-index"
+        }
+    }, {
         $replaceRoot: {
             newRoot: "$variation"
         }

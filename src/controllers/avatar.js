@@ -16,7 +16,12 @@ export async function getRandom(req, res) {
 
     const variations = await avatarService.getVariationsByIds(ids_and_colors.map(({_id}) => _id));
 
-    const svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), ids_and_colors.map(({color}) => color));
+    // Reorder the variations and colors using the variation z-index
+    const idsOrdered = variations.sort((a, b) => a["z-index"] - b["z-index"]).map(v => v._id);
+    const colorsOrdered = ids_and_colors.sort((a, b) => idsOrdered.indexOf(a._id) - idsOrdered.indexOf(b._id)).map(({color}) => color);
+    const variationsOrdered = variations.sort((a, b) => idsOrdered.indexOf(a._id) - idsOrdered.indexOf(b._id));
+
+    const svg = svgParser.concatenateHastsToSvg(variationsOrdered.map(v => v.svg), colorsOrdered);
 
     res.json({
         attributes: variations.map(v => {
