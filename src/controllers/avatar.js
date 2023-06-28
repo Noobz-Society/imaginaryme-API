@@ -102,6 +102,34 @@ async function getAll(req, res) {
     res.json(avatars);
 }
 
+/**
+ * @param req {Request}
+ * @param res {Response}
+ * @returns {Promise<void>}
+ */
+async function get(req, res) {
+    const {id} = req.params;
+
+    if (!validator.isMongoId(id)) {
+        res.json(ApiError.InvalidType("id", "ObjectId"));
+        return;
+    }
+
+    const avatar = await avatarService.findOne(id);
+
+    if (!avatar) {
+        res.json(ApiError.NotFound("id"));
+        return;
+    }
+
+    if (!avatar.isPublic && req.user?.role !== "admin" && !avatar.user.equals(req.user._id)) {
+        res.json(ApiError.NotAuthorized());
+        return;
+    }
+
+    res.json(avatar);
+}
+
 async function changeVisibility(req, res) {
     // Initialize body if it doesn't exist, so we can check for fields, even if they are empty
     req.body ||= {};
@@ -249,6 +277,7 @@ async function deleteAvatar(req, res) {
 
 const avatarController = {
     getAll,
+    get,
     getRandom,
     getSpecific,
     changeVisibility,

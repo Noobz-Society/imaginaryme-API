@@ -75,24 +75,66 @@ async function variationExistsById(variationId) {
  */
 async function getAll(canSeePrivate) {
     /**
-     * @type {Avatar[]}
+     * Filter for the aggregation pipeline
+     * @type {mongoose.PipelineStage[]}
      */
-    let avatars;
-    if (canSeePrivate) {
-        avatars = await Avatar.find();
-    } else {
-        avatars = await Avatar.find({
-            isPublic: true
+    const filter = [{
+        $lookup: {
+            from: "users",
+            localField: "user",
+            foreignField: "_id",
+            as: "user"
+        }
+    }, {
+        $unwind: "$user"
+    }, {
+        $addFields: {
+            likes: {
+                $size: {
+                    $filter: {
+                        input: "$review",
+                        cond: {
+                            $eq: ["$$this.value", 1]
+                        }
+                    }
+                }
+            },
+            dislikes: {
+                $size: {
+                    $filter: {
+                        input: "$review",
+                        cond: {
+                            $eq: ["$$this.value", -1]
+                        }
+                    }
+                }
+            }
+        }
+    }, {
+        $project: {
+            review: 0,
+            "user.pwd": 0,
+            "user.email": 0
+        }
+    }];
+
+    if (!canSeePrivate) {
+        filter.unshift({
+            $match: {
+                isPublic: true
+            }
         });
     }
 
-    avatars = await Promise.all(avatars.map(async avatar => {
-        const newAvatar = avatar.toObject();
-        const variations = await getVariationsByIds(newAvatar.attributes.map(({variation}) => variation));
-        const colors = newAvatar.attributes.map(({color}) => color);
+    let avatars = await Avatar.aggregate(filter);
 
-        newAvatar.svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), colors);
-        return newAvatar;
+    avatars = await Promise.all(avatars.map(async avatar => {
+        const variations = await getVariationsByIds(avatar.attributes.map(({variation}) => variation));
+        const colors = avatar.attributes.map(({color}) => color);
+
+        avatar.svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), colors);
+        delete avatar.attributes;
+        return avatar;
     }));
 
     return avatars;
@@ -110,9 +152,66 @@ async function exists(id) {
  * @returns {Promise<Avatar>}
  */
 async function findOne(id) {
-    return Avatar.findOne({
-        _id: id
-    });
+    /**
+     * Filter for the aggregation pipeline
+     * @type {mongoose.PipelineStage[]}
+     */
+    const filter = [{
+        $match: {
+            _id: new mongoose.Types.ObjectId(id)
+        }
+    }, {
+        $lookup: {
+            from: "users",
+            localField: "user",
+            foreignField: "_id",
+            as: "user"
+        }
+    }, {
+        $unwind: "$user"
+    }, {
+        $addFields: {
+            likes: {
+                $size: {
+                    $filter: {
+                        input: "$review",
+                        cond: {
+                            $eq: ["$$this.value", 1]
+                        }
+                    }
+                }
+            },
+            dislikes: {
+                $size: {
+                    $filter: {
+                        input: "$review",
+                        cond: {
+                            $eq: ["$$this.value", -1]
+                        }
+                    }
+                }
+            }
+        }
+    }, {
+        $project: {
+            review: 0,
+            "user.pwd": 0,
+            "user.email": 0
+        }
+    }];
+
+    let avatar = (await Avatar.aggregate(filter))[0];
+
+    if (!avatar) {
+        return null;
+    }
+
+    const variations = await getVariationsByIds(avatar.attributes.map(({variation}) => variation));
+    const colors = avatar.attributes.map(({color}) => color);
+
+    avatar.svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), colors);
+
+    return avatar;
 }
 
 async function deleteOne(id) {

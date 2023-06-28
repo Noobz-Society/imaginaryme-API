@@ -7,7 +7,8 @@ const router = express.Router();
 router.post("/create", avatarController.getSpecific);
 router.get("/create", avatarController.getRandom);
 
-router.get("/all", requireAuth, avatarController.getAll);
+router.get("/", requireAuth, avatarController.getAll);
+router.get("/:id", requireAuth, avatarController.get);
 
 router.post("/:id/like", requireAuth, avatarController.like);
 router.post("/:id/visibility", requireAuth, avatarController.changeVisibility);

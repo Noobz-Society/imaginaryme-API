@@ -41,6 +41,10 @@ GET http://localhost:3000/avatar/create
 
 ###
 GET http://localhost:3000/avatar/all
+Authorization: Bearer {{jwt}}
+
+###
+GET http://localhost:3000/avatar/649ab14170541ff44bd7eaa5
 Authorization: Bearer {{admin-jwt}}
 
 ###
