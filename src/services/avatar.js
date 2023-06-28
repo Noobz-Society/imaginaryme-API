@@ -26,16 +26,8 @@ async function getVariationsByIds(ids) {
     }, {
         $unwind: "$variation"
     }, {
-        $addFields: {
-            "variation.z-index": "$z-index"
-        }
-    }, {
         $replaceRoot: {
             newRoot: "$variation"
-        }
-    }, {
-        $sort: {
-            "z-index": 1
         }
     }]);
 }
