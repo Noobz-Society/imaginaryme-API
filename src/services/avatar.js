@@ -136,7 +136,6 @@ async function getAll(canSeePrivate) {
         const colors = avatar.attributes.map(({color}) => color);
 
         avatar.svg = svgParser.concatenateHastsToSvg(variations.map(v => v.svg), colors);
-        delete avatar.attributes;
         return avatar;
     }));
 
