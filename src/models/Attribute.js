@@ -29,11 +29,6 @@ const AttributeSchema = new mongoose.Schema({
         colors: {
             type: [String],
             default: []
-        },
-
-        "z-index": {
-            type: Number,
-            default: 5
         }
     }, {versionKey: false} // Disable the version key
 );

@@ -116,7 +116,6 @@ async function getAll(canSeePrivate) {
         }
     }, {
         $project: {
-            review: 0,
             "user.pwd": 0,
             "user.email": 0
         }
